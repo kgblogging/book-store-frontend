@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { HomeIcon, UserIcon, CogIcon } from '@heroicons/react/solid';
+import { HomeIcon, UserIcon, CogIcon, BookOpenIcon } from '@heroicons/react/solid';
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   const [activeLink, setActiveLink] = useState('/');
@@ -84,8 +84,8 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
           <Link
             to="/profile"
             className={`flex items-center w-full ${activeLink === '/profile'
-                ? 'bg-white text-gray-800 rounded-md p-2'
-                : ''
+              ? 'bg-white text-gray-800 rounded-md p-2'
+              : ''
               }`}
             onClick={() => handleLinkClick('/profile')}
           >
@@ -98,6 +98,29 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
           {isCollapsed && (
             <span className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white text-sm px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Profile
+            </span>
+          )}
+        </li>
+
+        {/* book link */}
+        <li className="mb-4 flex items-center group relative">
+          <Link
+            to="/book"
+            className={`flex items-center w-full ${activeLink === '/book'
+              ? 'bg-white text-gray-800 rounded-md p-2'
+              : ''
+              }`}
+            onClick={() => handleLinkClick('/book')}
+          >
+            <BookOpenIcon
+              className={`h-6 w-6 ${isCollapsed ? 'mx-auto' : 'mr-3'
+                } transition-all duration-300`}
+            />
+            {!isCollapsed && <span className="text-lg">My Book</span>}
+          </Link>
+          {isCollapsed && (
+            <span className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white text-sm px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              My Book
             </span>
           )}
         </li>

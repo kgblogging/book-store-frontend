@@ -6,6 +6,7 @@ const Register = lazy(() => import("../pages/register"));
 const Dashboard = lazy(() => import("../pages/dashboard"));
 const Layout = lazy(() => import('../container/layout/'));
 const Logout = lazy(() => import('../pages/logout/'));
+const AllBook = lazy(()=>import('../pages/allbook'))
 
 const openRoutes = [
     { path: "/", exact: true, component: Login },
@@ -15,6 +16,8 @@ const openRoutes = [
 const authRoutes = [
     { path: "/", exact: true, component: Dashboard },
     { path: "/dashboard", exact: true, component: Dashboard },
+    { path: "/book", exact: true, component: AllBook },
+    { path: "/book/:action", exact: true, component: AllBook },
     { path: "/logout", exact: true, component: Logout },
 ];
 

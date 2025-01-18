@@ -1,0 +1,1 @@
+export const VIEW_BOOK = `/books/get-books`

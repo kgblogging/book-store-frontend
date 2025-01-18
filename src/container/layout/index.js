@@ -7,7 +7,6 @@ import { getDataFromStore } from "../../store/getStore";
 
 const Layout = ({ children }) => {
     let auth = getDataFromStore("Auth");
-    console.log(auth)
     const navigate = useNavigate()
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [profilePicture] = useState("https://i.pravatar.cc/300");

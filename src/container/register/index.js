@@ -3,6 +3,8 @@ import { actionNotifier } from '../../components/ui/toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { onRegister } from '../../store/auth/actions';
+import Input from '../../components/ui/input';
+import Button from '../../components/ui/button';
 
 const RegisterContainer = (props) => {
     const [state, setState] = useState({
@@ -37,7 +39,7 @@ const RegisterContainer = (props) => {
             actionNotifier.error('Passwords do not match!');
             return;
         }
-        props.onRegister(state,navigate);
+        props.onRegister(state, navigate);
     };
 
     return (
@@ -50,35 +52,28 @@ const RegisterContainer = (props) => {
                         <p className="mt-2 text-lg text-gray-600">Sign Up for BookStore</p>
                     </div>
                     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                        <input
-                            type="text"
+                        <Input
                             name="name"
-                            id="name"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            placeholder="Full Name"
                             value={state.name}
                             onChange={handleChange}
+                            placeholder="Full Name"
                             required
                         />
-                        <input
+                        <Input
                             type="email"
                             name="email"
-                            id="email"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            placeholder="Email address"
                             value={state.email}
                             onChange={handleChange}
+                            placeholder="Email address"
                             required
                         />
                         <div className="relative">
-                            <input
+                            <Input
                                 type={state.showPassword ? 'text' : 'password'}
                                 name="password"
-                                id="password"
-                                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Password"
                                 value={state.password}
                                 onChange={handleChange}
+                                placeholder="Password"
                                 required
                             />
                             <button
@@ -100,19 +95,17 @@ const RegisterContainer = (props) => {
                                 }
                             </button>
                         </div>
-                        <input
+                        <Input
                             type="password"
                             name="confirmPassword"
-                            id="confirmPassword"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            placeholder="Confirm Password"
                             value={state.confirmPassword}
                             onChange={handleChange}
+                            placeholder="Confirm Password"
                             required
                         />
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-5">
                             <label className="flex items-center">
-                                <input
+                                <Input
                                     type="radio"
                                     name="gender"
                                     value="male"
@@ -123,7 +116,7 @@ const RegisterContainer = (props) => {
                                 <span className="ml-2">Male</span>
                             </label>
                             <label className="flex items-center">
-                                <input
+                                <Input
                                     type="radio"
                                     name="gender"
                                     value="female"
@@ -134,22 +127,18 @@ const RegisterContainer = (props) => {
                                 <span className="ml-2">Female</span>
                             </label>
                         </div>
-                        <input
+                        <Input
                             type="date"
                             name="dob"
-                            id="dob"
-                            max={new Date().toISOString().split('T')[0]} // Prevent future dates
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            max={new Date().toISOString().split('T')[0]}
                             value={state.dob}
                             onChange={handleChange}
                             required
                         />
-                        <button
+                          <Button
                             type="submit"
-                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        >
-                            Register
-                        </button>
+                            label='Register'
+                        />
                     </form>
                     <div className="flex items-center justify-between mt-4">
                         <hr className="flex-grow border-t border-gray-300" />
