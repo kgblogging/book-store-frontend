@@ -1,3 +1,7 @@
+import {
+    EyeIcon,
+    PlusIcon,
+} from "@heroicons/react/outline";
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -40,6 +44,7 @@ const PageHeader = ({
                                         word.charAt(0).toUpperCase() + word.slice(1)
                                     )
                                     .join(" ")}
+
                             </span>
                             <span className="mx-1">/</span>
                         </span>
@@ -54,9 +59,7 @@ const PageHeader = ({
                                 .join(" ")}
                         </span>
                     )}
-
                 </div>
-
             )}
 
             {/* Header Section */}
@@ -66,10 +69,18 @@ const PageHeader = ({
                 <div className="flex justify-end space-x-2">
                     {showButton && (
                         <button
-                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+                            className="flex item-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
                             onClick={onView}
                         >
-                            {viewText === "View" ? "View" : "Add"}
+                            {viewText === "View" ? (
+                                <>
+                                    <EyeIcon className="w-5 h-5 mr-2" />
+                                    <span>View</span>
+                                </>
+                            ) : (
+                                "Add"
+                            )}
+
                         </button>
                     )}
                     {onBack && (

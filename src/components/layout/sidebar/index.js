@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HomeIcon, UserIcon, CogIcon, BookOpenIcon } from '@heroicons/react/solid';
+import { getDataFromStore } from '../../../store/getStore';
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
-  const [activeLink, setActiveLink] = useState('/');
+  const location = useLocation();
+  const [activeLink, setActiveLink] = useState(location.pathname);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const handleLinkClick = (path) => {
@@ -14,14 +16,17 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
     setIsSettingsOpen(!isSettingsOpen);
   };
 
+  let auth = getDataFromStore('Auth')
+
+  console.log()
   return (
     <div
-      className={`bg-gray-800 text-white p-5 h-full relative ${isCollapsed ? 'w-20' : 'w-64'
+      className={`bg-gray-800 text-white p-5 h-full relative ${isCollapsed ? 'w-20' : 'w-55'
         } transition-all duration-300 ease-in-out flex flex-col`}
     >
       <div className="flex items-center justify-between mb-5">
         {!isCollapsed && (
-          <div className="text-xl font-semibold text-white">User Name</div>
+          <div className="text-lg font-semibold text-white">👋 - {auth?.auth?.user?.name}</div>
         )}
         <button
           onClick={toggleSidebar}
@@ -36,7 +41,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
             >
               <path
                 fillRule="evenodd"
-                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-4.28 9.22a.75.75 0 0 0 0 1.06l3 3a.75.75 0 1 0 1.06-1.06l-1.72-1.72h5.69a.75.75 0 0 0 0-1.5h-5.69l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3Z"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z"
                 clipRule="evenodd"
               />
             </svg>
@@ -49,7 +54,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
             >
               <path
                 fillRule="evenodd"
-                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z"
+                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-4.28 9.22a.75.75 0 0 0 0 1.06l3 3a.75.75 0 1 0 1.06-1.06l-1.72-1.72h5.69a.75.75 0 0 0 0-1.5h-5.69l1.72-1.72a.75.75 0 0 0-1.06-1.06l-3 3Z"
                 clipRule="evenodd"
               />
             </svg>

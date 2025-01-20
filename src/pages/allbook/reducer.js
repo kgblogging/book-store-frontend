@@ -2,12 +2,18 @@ import * as actionTypes from './actionTypes';
 
 const initialState = {
     filters: {
+        "search": "",
         "sort": {
-            "attributes": ["created_date"],
+            "attributes": ["created_at"],
             "sorts": ["desc"]
-        }
+        },
+        "filters": [
+        ],
+        "pageNo": 1,
+        "itemsPerPage": 10
     },
-    allData: []
+    allData: [],
+
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,7 +24,7 @@ const reducer = (state = initialState, action) => {
                 allData: action.payload.data,
                 count: action.payload.count
             }
-            
+
             break;
         case actionTypes.UPDATE_REDUCER:
             state = {
