@@ -10,7 +10,7 @@ const Pagination = ({ count, itemsPerPage, pageNo, handlePage, handleCount }) =>
 
   useEffect(() => {
     handlePage(currentPage);
-  }, [currentPage, handlePage]);
+  }, [currentPage]);
 
   const totalPages = Math.ceil(count / itemsPerPage);
 

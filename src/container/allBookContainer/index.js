@@ -10,7 +10,9 @@ import { PencilIcon } from '@heroicons/react/solid';
 import Button from '../../components/ui/button';
 import { TrashIcon } from '@heroicons/react/outline';
 import Pagination from '../../components/pagination';
-const AllBookContainer = ({ allBookData }) => {
+import Input from '../../components/ui/input';
+import ConfirmationDialog from '../../components/confirmationDialog';
+const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDeleteBook, updateFilters, updateReducer }) => {
 
     const formRef = useRef(null);
     const navigate = useNavigate();
@@ -18,19 +20,35 @@ const AllBookContainer = ({ allBookData }) => {
     let [rows, setRows] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
     const params = useParams();
-    console.log(allBookData)
     useEffect(() => {
         if (params.action === "add") setViewForm(true);
         else if (params.action === "view") setViewForm(false);
     }, [params.action]);
 
     const initialState = {
-        bookId: null,
+        id: null,
         title: "",
         author: "",
         year: "",
     };
     const [state, setState] = useState(initialState);
+
+    //handle confirmation
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [selectedItemId, setSelectedItemId] = useState(null);
+
+    const handleDeleteIconClick = (itemId) => {
+        setSelectedItemId(itemId);
+        setOpenDeleteDialog(true);
+    };
+    const handleCloseDeleteDialog = () => {
+        setOpenDeleteDialog(false);
+    };
+    const handleDeleteConfirmation = () => {
+        onDeleteBook({ id: selectedItemId });
+        setOpenDeleteDialog(false);
+        setSelectedItemId(null);
+    };
 
     const resetForm = () => {
         setState(initialState);
@@ -39,8 +57,12 @@ const AllBookContainer = ({ allBookData }) => {
         }
     };
 
-    const handleSearch = (query) => {
-        console.log("Search query:", query);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setState((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
     const handleFilterChange = (value) => {
@@ -51,27 +73,34 @@ const AllBookContainer = ({ allBookData }) => {
         setViewForm(!viewForm)
     };
 
+    const handleEdit = (rowData, navigate) => {
+        window.scrollTo(0, 0);
+        resetForm();
+        navigate("/book/add");
+        setState({
+            id: rowData._id,
+            title: rowData.title,
+            author: rowData.author,
+            year: rowData.year,
 
-    const handleEdit = () => {
-        console.log("hi")
-    }
+        });
+    };
     const handleSort = (sort) => {
         let _allFilter = { ...allBookData.filters.sort };
         _allFilter.sorts = sort;
-        console.log(_allFilter)
-        // props.updateFilters(_allFilter);
+        updateFilters(_allFilter);
     };
     const handleCount = (count) => {
         let _allFilter = { ...allBookData.filters };
         _allFilter.itemsPerPage = count;
         console.log(_allFilter)
-        // props.updateFilters(_allFilter);
+        updateFilters(_allFilter);
     };
     const handlePage = (pageNumber) => {
         let _allFilter = { ...allBookData.filters };
         _allFilter.pageNo = pageNumber;
         console.log(_allFilter)
-        // props.updateFilters(_allFilter);
+        updateFilters(_allFilter);
     };
     useEffect(() => {
         if (allBookData?.allData) {
@@ -83,8 +112,8 @@ const AllBookContainer = ({ allBookData }) => {
                     action: (
                         <>
                             <div className='flex'>
-                                <Button icon={PencilIcon} color="primary" size="100px" onClick={() => handleEdit('Edit clicked')} outlined className='mr-1' />
-                                <Button icon={TrashIcon} color="primary" size="100px" onClick={() => handleEdit('Edit clicked')} outlined />
+                                <Button icon={PencilIcon} color="primary" size="100px" onClick={() => handleEdit(f, navigate)} outlined className='mr-1' />
+                                <Button icon={TrashIcon} color="primary" size="100px" onClick={() => handleDeleteIconClick(f._id)} outlined />
                             </div>
                         </>
                     ),
@@ -92,15 +121,31 @@ const AllBookContainer = ({ allBookData }) => {
             });
             setRows(updatedRows);
         }
-    }, [allBookData]);
+    }, [allBookData.allData, allBookData?.filters]);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (state.id) {
+            onEditBook(state, navigate)
+        } else {
+            onAddBook(state, navigate)
+            resetForm();
+        }
+    }
 
 
     return (
         <div>
+            <ConfirmationDialog
+                open={openDeleteDialog}
+                handleClose={handleCloseDeleteDialog}
+                handleConfirmation={handleDeleteConfirmation}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this item?"
+            />
             <PageHeader
                 heading={"My Book"}
                 breadcrumb={"My Book"}
-                breadcrumbActive={" Notification manager"}
+                breadcrumbActive={"Notification manager"}
                 pageText={"Notification"}
                 pageTextLink={viewForm ? VIEW_BOOK : ADD_BOOK}
                 showButton={viewForm}
@@ -110,63 +155,47 @@ const AllBookContainer = ({ allBookData }) => {
             {
                 viewForm ?
                     <><div className="p-4 bg-white shadow-md rounded-md mt-2">
-                        <form>
+                        <form autoComplete="off" onSubmit={handleSubmit} ref={formRef}>
                             <div className="grid grid-cols-2 gap-4">
-                                {/* First Name */}
                                 <div className="col-span-2 sm:col-span-1">
-                                    <label className="block text-gray-700 mb-1" htmlFor="first-name">
-                                        First Name
-                                    </label>
-                                    <input
-                                        id="first-name"
+                                    <Input
                                         type="text"
-                                        placeholder="First Name"
-                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        name="title"
+                                        value={state.title}
+                                        onChange={handleChange}
+                                        placeholder="Enter Book Title"
+                                        label="Book Title"
+                                        className="border-blue-500"
                                     />
                                 </div>
-
-                                {/* Last Name */}
                                 <div className="col-span-2 sm:col-span-1">
-                                    <label className="block text-gray-700 mb-1" htmlFor="last-name">
-                                        Last Name
-                                    </label>
-                                    <input
-                                        id="last-name"
+                                    <Input
                                         type="text"
-                                        placeholder="Last Name"
-                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        name="author"
+                                        value={state.author}
+                                        onChange={handleChange}
+                                        placeholder="Enter Book Author"
+                                        label="Book Author"
+                                        className="border-blue-500"
+                                    />
+                                </div>
+                                <div className="col-span-2 sm:col-span-1">
+                                    <Input
+                                        type="date"
+                                        name="year"
+                                        value={state.year}
+                                        onChange={handleChange}
+                                        placeholder="Enter published Date"
+                                        label="Book Published Date"
+                                        className="border-blue-500"
+                                        max={new Date().toISOString().split('T')[0]}
                                     />
                                 </div>
 
-                                {/* Email */}
-                                <div className="col-span-2 sm:col-span-1">
-                                    <label className="block text-gray-700 mb-1" htmlFor="email">
-                                        Email
-                                    </label>
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        placeholder="Email"
-                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
-
-                                {/* Phone Number */}
-                                <div className="col-span-2 sm:col-span-1">
-                                    <label className="block text-gray-700 mb-1" htmlFor="phone">
-                                        Phone Number
-                                    </label>
-                                    <input
-                                        id="phone"
-                                        type="tel"
-                                        placeholder="Phone Number"
-                                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
                             </div>
                             <div className='flex justify-end mt-2'>
-                                <Button color="primary" size="medium" label={"Submit"} className='mr-2' />
-                                <Button color="primary" size="medium" label={"Reset"} outlined />
+                                <Button color="primary" type='submit' size="medium" label={state.bookId ? "Update" : "Add"} className='mr-2' />
+                                <Button color="primary" size="medium" label={"Reset"} outlined onClick={resetForm} />
                             </div>
                         </form>
                     </div>
@@ -174,7 +203,7 @@ const AllBookContainer = ({ allBookData }) => {
                     :
                     <>
                         <SearchBar
-                            onSearch={("gasd")}
+                            onSearch={onSearch}
                             hasPermission={true}
                             onCreate={() =>
                                 handleCreate(navigate, ADD_BOOK, resetForm)
@@ -194,7 +223,8 @@ const AllBookContainer = ({ allBookData }) => {
                                 handlePage={handlePage}
                                 handleCount={handleCount}
                             />
-                            <Pagination count={allBookData.count}
+                            <Pagination
+                                count={allBookData.count}
                                 itemsPerPage={allBookData.filters.itemsPerPage}
                                 pageNo={allBookData.filters.pageNo}
                                 handlePage={handlePage}

@@ -26,6 +26,12 @@ const reducer = (state = initialState, action) => {
             }
 
             break;
+        case actionTypes.UPDATE_FILTER:
+            state = {
+                ...state,
+                filters: action.payload,
+            }
+            break;
         case actionTypes.UPDATE_REDUCER:
             state = {
                 ...state,

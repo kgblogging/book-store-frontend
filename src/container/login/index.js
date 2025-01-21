@@ -52,6 +52,7 @@ const LoginContainer = (props) => {
                         <Button
                             type="submit"
                             label='Sign In'
+                            size='full'
                         />
 
                     </form>

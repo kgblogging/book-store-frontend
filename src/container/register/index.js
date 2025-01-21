@@ -135,9 +135,10 @@ const RegisterContainer = (props) => {
                             onChange={handleChange}
                             required
                         />
-                          <Button
+                        <Button
                             type="submit"
                             label='Register'
+                            size='full'
                         />
                     </form>
                     <div className="flex items-center justify-between mt-4">
