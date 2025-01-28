@@ -12,6 +12,14 @@ import { TrashIcon } from '@heroicons/react/outline';
 import Pagination from '../../components/pagination';
 import Input from '../../components/ui/input';
 import ConfirmationDialog from '../../components/confirmationDialog';
+import { GET_GENRE_DROPDOWN } from '../../apiCalls/urls/admin/book';
+import { apiFunction } from '../../apiCalls/function';
+
+// apis
+export const getGenreList = async () => {
+    return await apiFunction(GET_GENRE_DROPDOWN, 'get', {}, false, false)
+}
+
 const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDeleteBook, updateFilters, updateReducer }) => {
 
     const formRef = useRef(null);
@@ -19,17 +27,38 @@ const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDele
     const [viewForm, setViewForm] = useState(false);
     let [rows, setRows] = useState([]);
     const [columnVisibility, setColumnVisibility] = useState({});
+
+    const [genre, setGenre] = useState([])
     const params = useParams();
     useEffect(() => {
         if (params.action === "add") setViewForm(true);
         else if (params.action === "view") setViewForm(false);
     }, [params.action]);
 
+
+
+    useEffect(() => {
+        const fetchGenres = async () => {
+            try {
+                const response = await getGenreList(); // Replace with your API endpoint
+                if (response.status) {
+                    setGenre(response.data); // Assuming the genres are in `data.data`
+                }
+            } catch (error) {
+                console.error('Error fetching genres:', error);
+            }
+        };
+
+        fetchGenres();
+    }, []);
+
     const initialState = {
         id: null,
         title: "",
         author: "",
         year: "",
+        genre: "",
+        bookIntroduction: "",
     };
     const [state, setState] = useState(initialState);
 
@@ -77,12 +106,14 @@ const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDele
         window.scrollTo(0, 0);
         resetForm();
         navigate("/book/add");
+        console.log(rowData)
         setState({
             id: rowData._id,
             title: rowData.title,
             author: rowData.author,
             year: rowData.year,
-
+            bookIntroduction: rowData.bookIntroduction,
+            genre: rowData?.genre,
         });
     };
     const handleSort = (sort) => {
@@ -109,6 +140,7 @@ const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDele
                     title: f.title ? f.title : "-",
                     author: f.author ? f.author : "-",
                     published: f.year ? f.year : "-",
+                    genre: f?.genre?.title,
                     action: (
                         <>
                             <div className='flex'>
@@ -131,7 +163,6 @@ const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDele
             resetForm();
         }
     }
-
 
     return (
         <div>
@@ -168,6 +199,25 @@ const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDele
                                         className="border-blue-500"
                                     />
                                 </div>
+                                <div className='col-span-2 sm:col-span-1'>
+                                    <label htmlFor="genre">Choose a Genre:</label>
+                                    <select
+                                        name="genre"
+                                        id="genre"
+                                        value={state.genre?._id}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="" disabled>
+                                            Select a Genre
+                                        </option>
+                                        {genre.length > 0 &&
+                                            genre.map((a) => (
+                                                <option value={a._id} key={a._id}>
+                                                    {a.value}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
                                 <div className="col-span-2 sm:col-span-1">
                                     <Input
                                         type="text"
@@ -189,6 +239,17 @@ const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDele
                                         label="Book Published Date"
                                         className="border-blue-500"
                                         max={new Date().toISOString().split('T')[0]}
+                                    />
+                                </div>
+                                <div className="col-span-2 sm:col-span-1">
+                                    <Input
+                                        type="text"
+                                        name="bookIntroduction"
+                                        value={state.bookIntroduction}
+                                        onChange={handleChange}
+                                        placeholder="Enter Book Intro Details"
+                                        label="Book Introduction"
+                                        className="border-blue-500"
                                     />
                                 </div>
 

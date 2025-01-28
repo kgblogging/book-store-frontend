@@ -154,8 +154,8 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
               } bg-gray-700 rounded-md mt-2`}
           >
             <li className="p-1 hover:bg-gray-600 rounded">
-              <Link to="/system-settings" className="text-white">
-                System Settings
+              <Link to="/change-password" className="text-white">
+                Change-password
               </Link>
             </li>
             <li className="p-1 hover:bg-gray-600 rounded">

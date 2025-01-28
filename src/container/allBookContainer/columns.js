@@ -21,6 +21,13 @@ export const columns = [
         isVisible: true,
     },
     {
+        name: "genre",
+        label: "Genre",
+        sort: false,
+        width: "200px",
+        isVisible: true,
+    },
+    {
         name: "action",
         label: "Action",
         sort: false,

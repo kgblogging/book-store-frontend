@@ -35,7 +35,7 @@ export function onFetchAllBooks() {
     return async (dispatch) => {
         dispatch(apiLoading())
         let allBook = getDataFromStore("BookReducer")
-        let result = await fetchAllBook(allBook);
+        let result = await fetchAllBook(allBook.filters);
         if (result.status) {
             dispatch(updateBookReducer(result?.data, result.count))
         }
@@ -45,6 +45,7 @@ export function onFetchAllBooks() {
         dispatch(apiLoadingEnd())
     }
 }
+
 
 export function onAddBook(data, navigate) {
     return async (dispatch) => {

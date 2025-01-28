@@ -4,7 +4,7 @@ const initialState = {
     filters: {
         "search": "",
         "sort": {
-            "attributes": ["created_at"],
+            "attributes": ["createdAt"],
             "sorts": ["desc"]
         },
         "filters": [
@@ -13,6 +13,7 @@ const initialState = {
         "itemsPerPage": 10
     },
     allData: [],
+    genreDropdown:[]
 
 }
 

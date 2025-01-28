@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { actionNotifier } from "../../components/ui/toast";
-import { handleLogin, handleRegister } from "./apis";
+import { handleChangePassword, handleLogin, handleRegister } from "./apis";
 import { apiLoading, apiLoadingEnd } from "../notification/action";
 // import { getAllPermission } from "../../Shared/permission";
 // import { notiflixLoaderStart, notiflixStatus, notiflixLoaderEnd } from '../../components/ui/notification'
@@ -38,6 +38,19 @@ export const onRegister = (state, navigate) => {
         dispatch(apiLoadingEnd());
     };
 };
+
+export const onChangePassword = (state, navigate) => {
+    return async (dispatch) => {
+        dispatch(apiLoading())
+        let result = await handleChangePassword(state)
+        if (result.status) {
+            actionNotifier.success(result.message);
+        } else {
+            actionNotifier.error(result.message);
+        }
+        dispatch(apiLoadingEnd());
+    }
+}
 
 export const onLogout = (navigate) => {
     return (dispatch) => {

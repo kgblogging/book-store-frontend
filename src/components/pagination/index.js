@@ -46,9 +46,8 @@ const Pagination = ({ count, itemsPerPage, pageNo, handlePage, handleCount }) =>
       </div>
       <div className="flex items-center space-x-2">
         <button
-          className={`p-2 border rounded-md ${
-            currentPage === 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
-          }`}
+          className={`p-2 border rounded-md ${currentPage === 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
+            }`}
           onClick={handlePageDecrease}
           disabled={currentPage === 1}
         >
@@ -66,9 +65,8 @@ const Pagination = ({ count, itemsPerPage, pageNo, handlePage, handleCount }) =>
           ))}
         </select>
         <button
-          className={`p-2 border rounded-md ${
-            currentPage === totalPages ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
-          }`}
+          className={`p-2 border rounded-md ${currentPage === totalPages ? "text-gray-300 cursor-not-allowed" : "text-gray-600 hover:bg-gray-100"
+            }`}
           onClick={handlePageIncrease}
           disabled={currentPage === totalPages}
         >

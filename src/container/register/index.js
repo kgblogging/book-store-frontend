@@ -24,6 +24,7 @@ const RegisterContainer = (props) => {
             ...prev,
             [name]: value,
         }));
+
     };
 
     const togglePasswordVisibility = () => {
