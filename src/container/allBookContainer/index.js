@@ -164,6 +164,8 @@ const AllBookContainer = ({ onSearch, allBookData, onAddBook, onEditBook, onDele
         }
     }
 
+    console.log("Added a console log to check")
+
     return (
         <div>
             <ConfirmationDialog
